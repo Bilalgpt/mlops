@@ -1,5 +1,9 @@
 pipeline {
     agent any
+
+    enviroment = {
+        VENV_DIR='venv'
+    }
     
     stages {
         stage('Cloning Github repo to Jenkins') {
@@ -10,6 +14,21 @@ pipeline {
                              extensions: [], 
                              userRemoteConfigs: [[credentialsId: 'github-token', 
                                                  url: 'https://github.com/Bilalgpt/mlops.git']])
+                }
+            }
+        }
+
+
+        stage('Setting up our virtual enviroment and installing dependencies') {
+            steps {
+                script {
+                    echo 'Setting up our virtual enviroment and installing dependencies'
+                    sh '''
+                    python -m venv ${VENV_DIR}
+                    .${VENV_DIR}/bin/activate
+                    pip install upgarde pip
+                    pip install -e .
+                    '''
                 }
             }
         }
