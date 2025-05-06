@@ -1,8 +1,8 @@
 pipeline {
     agent any
-
-    enviroment = {
-        VENV_DIR='venv'
+    
+    environment {
+        VENV_DIR = 'venv'
     }
     
     stages {
@@ -17,16 +17,16 @@ pipeline {
                 }
             }
         }
-
-
-        stage('Setting up our virtual enviroment and installing dependencies') {
+        
+        stage('Setting up our virtual environment and installing dependencies') {
             steps {
                 script {
-                    echo 'Setting up our virtual enviroment and installing dependencies'
+                    echo 'Setting up our virtual environment and installing dependencies'
                     sh '''
                     python -m venv ${VENV_DIR}
-                    .${VENV_DIR}/bin/activate
-                    pip install upgarde pip
+                    . ${VENV_DIR}/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
                     pip install -e .
                     '''
                 }
