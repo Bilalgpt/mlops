@@ -54,13 +54,13 @@ pipeline {
                     }
                 }
             }
+        }
 
-
-            stage('Deploy to google cloud run ') {
+        stage('Deploy to google cloud run') {
             steps {
                 withCredentials([file(credentialsId: 'GCP-KEY', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                     script {
-                        echo 'Building and pushing Docker Image to GCR..................'
+                        echo 'Deploying to Google Cloud Run..................'
                         sh '''
                         export PATH=$PATH:${GCLOUD_PATH}
 
@@ -69,15 +69,10 @@ pipeline {
                         gcloud config set project ${GCP_PROJECT}
 
                         gcloud run deploy ml-project \
-                             -- image=gcr.io/${GCP_PROJECT}/ml-project:latest \
+                             --image=gcr.io/${GCP_PROJECT}/ml-project:latest \
                              --platform=managed \
-                             --region=us-central \
-                             --allow=unauthenticated 
-                       
-
-                         
-
-                        
+                             --region=us-central1 \
+                             --allow-unauthenticated 
                         '''
                     }
                 }
